@@ -120,25 +120,16 @@ app.get('/rep', function(req, res) {
 });
 
 app.get('/rep/:repid', function(req, res) {
-	var resultArr = _.filter(_DATA, function(obj){
-		return obj.person.id == parseInt(req.params.repid)
-	});
-	
-	var result = resultArr[0];
-	
-    if (!result) return res.json({});
-	
-	var param = {};
-	param.header = result.person.name;
-	param.description = result.description;
-	param.birthday = result.person.birthday;
-	param.party = result.party;
-	param.state = result.state;
-	param.stateLink = _.invert(dataUtil.states)[param.state].toLowerCase().replace(new RegExp(' ', 'g'), '-');
-	param.website = result.website;
+    var _repid = req.params.repid;
+	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/?bioguide_id="+_repid,function(err,data){
+        console.log(data)
+        res.render('person',{
+            person: data.results[0]
+        })
+    });
 	
 	
-    res.render('person', { person:param });
+    
 });
 
 app.post('/search', function(req, res) {
