@@ -5,6 +5,7 @@ var exphbs = require('express-handlebars');
 var dataUtil = require("./data-util");
 var _ = require('underscore');
 var request = require('request');
+var nodemailer = require('nodemailer');
 
 // JSONP request handler from: http://stackoverflow.com/questions/9060270/node-http-request-for-restful-apis-that-return-jsonp
 var getJsonFromJsonP = function (url, callback) {
@@ -158,6 +159,46 @@ app.post('/search', function(req, res) {
         });
     });
     
+});
+
+app.get('/contact/:id', function(req, res) {
+	res.render('contact', {bioguide_id: req.params.id});
+});
+
+app.post('/contact', function(req, res) {
+	var subject = req.body.subject;
+	var message = req.body.message;
+	var repid = req.body.repid;
+	
+	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
+		var result = data.results[0];
+		console.log(data);
+		//res.redirect("mailto:"+result.oc_email+"?subject="+subject+"&body="+message);
+		
+		var transporter = nodemailer.createTransport({
+			service: 'gmail',
+			auth: {
+				user: "represent.us.contact@gmail.com",
+				pass: "memes.gov"
+			}
+		});
+		
+		var mail = {
+			//can replace the name with anything
+			from: '"Represent Us!" <represent.us.contact@gmail.com>',
+			//to: result.oc_email,
+			to: 'represent.us.contact@gmail.com',
+			subject: subject,
+			text: message+'\n\n sent to: '+result.oc_email
+		};
+		
+		transporter.sendMail(mail, (error, info) => {
+			if (error) {
+				return console.log(error);
+			}
+			console.log('Message %s sent: %s', info.messageId, info.response);
+		});
+	});
 });
 
 app.listen(3000, function() {
