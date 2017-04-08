@@ -1,0 +1,19 @@
+<!-- 
+Here, you will need an if statement to check if there are even democrats or
+republicans for each state. Make sure that your endpoint in index.js passes in 
+values for you to successfully check in this template file.
+-->
+<h1>{{state}}</h1>
+{{#if hasRepublicans}}
+	<h2>Republicans</h2>
+	{{#each republicans}}
+		<p><a href="/rep/{{this.person.id}}">{{this.person.name}}</a></p>
+	{{/each}}
+{{/if}}
+
+{{#if hasDemocrats}}
+	<h2>Democrats</h2>
+	{{#each democrats}}
+		<p><a href="/rep/{{this.person.id}}">{{this.person.name}}</a></p>
+	{{/each}}
+{{/if}}	

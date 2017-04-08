@@ -1,0 +1,116 @@
+var express = require('express');
+var bodyParser = require('body-parser');
+//var logger = require('morgan');
+var exphbs = require('express-handlebars');
+var dataUtil = require("./data-util");
+var _ = require('underscore');
+
+var app = express();
+
+//app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+app.use('/public', express.static('public'));
+
+var _DATA = dataUtil.loadData().objects;
+
+app.get('/', function(req, res) {
+	 
+	var states = [];
+	var origStates = dataUtil.states;
+	
+	for(var state in origStates){
+		var linkName = state.toLowerCase().replace(new RegExp(' ', 'g'), '-');
+		states.push({linkName:linkName, name:state});
+	}
+	
+    res.render('allstates', { states:states });
+})
+
+app.get('/party/:party', function(req, res) {
+	var party = req.params.party;
+	
+	var representatives = _.filter(_DATA, function(obj){
+		return obj.party.toUpperCase() == party.toUpperCase();
+	});
+		
+	party = party + 's';
+	party = party.toUpperCase();
+	
+    res.render('representatives', {
+        party:party,
+		representatives:representatives
+    });
+})
+
+app.get('/state/:name', function(req, res) {
+	 
+	var name = req.params.name;
+	name = name.substring(0,1).toUpperCase() + name.substring(1);
+	while(name.indexOf('-') != -1){
+		var index = name.indexOf('-');
+		name = name.substring(0, index) + ' ' + name.substring(index + 1);
+		name = name.substring(0, index+1) + name.substring(index+1,index+2).toUpperCase() + name.substring(index+2);
+	}
+	
+	var state = dataUtil.states[name];
+	
+	var representatives = _.filter(_DATA, function(obj){
+		return obj.state == state;
+	});
+	
+	var republicans = _.filter(representatives, function(obj){
+		return obj.party == "Republican";
+	});
+	
+	var democrats = _.filter(representatives, function(obj){
+		return obj.party == "Democrat";
+	});
+	
+	var hasRepublicans = republicans.length > 0;
+	var hasDemocrats = democrats.length > 0;
+	
+    res.render('state', {
+        state: name,
+		republicans: republicans,
+		democrats: democrats,
+		hasRepublicans: hasRepublicans,
+		hasDemocrats: hasDemocrats
+    })
+})
+
+app.get('/rep', function(req, res) {
+
+    res.render('representatives', {
+        party:"ALL REPRESENTATIVES",
+		representatives:_DATA
+    });
+});
+
+app.get('/rep/:repid', function(req, res) {
+	var resultArr = _.filter(_DATA, function(obj){
+		return obj.person.id == parseInt(req.params.repid)
+	});
+	
+	var result = resultArr[0];
+	
+    if (!result) return res.json({});
+	
+	var param = {};
+	param.header = result.person.name;
+	param.description = result.description;
+	param.birthday = result.person.birthday;
+	param.party = result.party;
+	param.state = result.state;
+	param.stateLink = _.invert(dataUtil.states)[param.state].toLowerCase().replace(new RegExp(' ', 'g'), '-');
+	param.website = result.website;
+	
+	
+    res.render('person', { person:param });
+});
+
+app.listen(3000, function() {
+    console.log('House of Representatives listening on port 3000!');
+});

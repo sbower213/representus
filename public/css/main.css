@@ -1,0 +1,11 @@
+/* Please add your own! */
+#navbar{
+    list-style-type: none;
+    margin: 5px;
+    padding: 0;
+}
+
+.nav li{
+	display: inline;
+	margin-right: 10px;
+}
