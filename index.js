@@ -125,11 +125,19 @@ app.get('/rep/:repid', function(req, res) {
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/?bioguide_id="+_repid,function(err,data){
         //console.log(data)
         person = data.results[0]
-        res.render('person',{
-            person: person
-        })
-        getJsonFromJsonP("http://www.opensecrets.org/api/?method=candContrib&cid="+person.crp_id+"&apikey=fcfe08573a5871a36bf33d846048cf70",function(err,data){
-            console.log(data);
+        
+        getJsonFromJsonP("http://www.opensecrets.org/api/?method=candContrib&cid="+person.crp_id+"&apikey=fcfe08573a5871a36bf33d846048cf70&output=json",function(err,data){
+            //console.log(data.response.contributors.contributor[0]['\@attributes']);
+            var contribs = data.response.contributors.contributor
+            var contributions = [];
+            for(i = 0; i < contribs.length; i++) {
+                contributions.push(contribs[i]['\@attributes'])
+            }
+            //console.log(contributions)
+            res.render('person',{
+                person: person,
+                contributions: contributions//data.response.contributors.contributor
+            })
         });
     });
 	

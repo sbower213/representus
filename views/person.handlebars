@@ -1,2 +1,8 @@
 <img src="/congress_pictures_files/{{person.govtrack_id}}-50px.jpeg">
 {{person.title}} {{person.first_name}} {{person.last_name}}
+<ul>
+    <h2>Contributions (According to OpenSecrets.org)</h2>
+{{#each contributions}}
+    <li>Organization: {{this.org_name}} | Total: ${{this.total}}</li>
+{{/each}}
+</ul>
