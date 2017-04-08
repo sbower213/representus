@@ -1,0 +1,8 @@
+
+$(document).ajaxSend(function(event, xhr, settings) { if (!/^https?:.*/.test(settings.url)) xhr.setRequestHeader("X-CSRFToken", "5GQ2Vw4BFzOPYKWzqp5boNLzNZpVu7Yx"); });
+var the_user = null;
+var the_page = null;
+var the_segment = "Other";
+var is_ad_free = false;
+
+

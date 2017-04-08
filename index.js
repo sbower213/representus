@@ -38,6 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.use('/public', express.static('public'));
+app.use('/congress_pictures_files', express.static('congress_pictures_files'));
 
 var _DATA = dataUtil.loadData().objects;
 
