@@ -135,10 +135,14 @@ app.get('/rep/:repid', function(req, res) {
                 contributions.push(contribs[i]['\@attributes'])
             }
             //console.log(contributions)
-            res.render('person',{
-                person: person,
-                contributions: contributions//data.response.contributors.contributor
-            })
+            getJsonFromJsonP("https://www.govtrack.us/api/v2/vote_voter/?person="+person.govtrack_id+"&limit=5&order_by=-created&format=json&fields=vote__id,created,option__value,vote__category,vote__chamber,vote__question,vote__number",function(err,data){
+                console.log(data.objects);
+                res.render('person',{
+                    person: person,
+                    contributions: contributions,
+                    votes: data.objects
+                }) 
+            });
         });
     });
 	

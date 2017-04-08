@@ -1,8 +1,18 @@
 <img src="/congress_pictures_files/{{person.govtrack_id}}-50px.jpeg">
 {{person.title}} {{person.first_name}} {{person.last_name}}
+<h2>Voting History</h2>
 <ul>
-    <h2>Contributions (According to OpenSecrets.org)</h2>
-{{#each contributions}}
-    <li>Organization: {{this.org_name}} | Total: ${{this.total}}</li>
-{{/each}}
+    {{#each votes}}
+        <li>
+            {{this.option.value}} | {{this.vote.question}}
+        </li>
+    {{/each}}
+</ul>
+<h2>Contributions (According to OpenSecrets.org)</h2>
+<ul> 
+    {{#each contributions}}
+        <li>
+            Organization: {{this.org_name}} | Total: ${{this.total}}
+        </li>
+    {{/each}}
 </ul>
