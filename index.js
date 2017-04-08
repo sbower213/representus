@@ -6,6 +6,7 @@ var dataUtil = require("./data-util");
 var _ = require('underscore');
 var request = require('request');
 
+// JSONP request handler from: http://stackoverflow.com/questions/9060270/node-http-request-for-restful-apis-that-return-jsonp
 var getJsonFromJsonP = function (url, callback) {
 request(url, function (error, response, body) {
   if (!error && response.statusCode == 200) {
