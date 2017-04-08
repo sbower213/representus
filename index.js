@@ -140,10 +140,10 @@ app.get('/rep/:repid', function(req, res) {
     res.render('person', { person:param });
 });
 
-app.get('/zip?=:zipcode', function(req, res) {
-    console.log("Hello");
+app.post('/search', function(req, res) {
+    console.log(req.body.zip);
     //var results
-    _zipcode = req.params.zipcode;
+    _zipcode = req.body.zip;
     getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/locate?zip="+_zipcode,function(err,data){
         console.log(data);
         res.render('zipcode',{
