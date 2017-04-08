@@ -123,13 +123,19 @@ app.get('/rep', function(req, res) {
 app.get('/rep/:repid', function(req, res) {
     var _repid = req.params.repid;
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/?bioguide_id="+_repid,function(err,data){
-        console.log(data)
+        //console.log(data)
+        person = data.results[0]
         res.render('person',{
-            person: data.results[0]
+            person: person
         })
+        getJsonFromJsonP("http://www.opensecrets.org/api/?method=candContrib&cid="+person.crp_id+"&apikey=fcfe08573a5871a36bf33d846048cf70",function(err,data){
+            console.log(data);
+        });
     });
 	
-	
+	/*getJsonFromJsonP("https://api.propublica.org/congress/v1/members/"+_repid+"/votes.json",function(err,data){
+        console.log(data);
+    });*/
     
 });
 
@@ -138,7 +144,7 @@ app.post('/search', function(req, res) {
     //var results
     _zipcode = req.body.zip;
     getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/locate?zip="+_zipcode,function(err,data){
-        console.log(data);
+        //console.log(data);
         res.render('zipcode',{
             reps: data.results
         });
