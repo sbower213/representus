@@ -1,8 +1,43 @@
-/* Please add your own! */
+
 #navbar{
     list-style-type: none;
     margin: 5px;
     padding: 0;
+}
+
+#main_logo_div{
+  width: 50%;
+  margin: 0 auto;
+}
+
+.blurb {
+	display: inline-block;
+	width: 33%;
+	margin: 5px auto;
+	vertical-align:top;
+}
+
+.blurb_title{
+	width: 33%;
+	margin: 0 auto;
+}
+
+#blurb_container{
+    //height: 40px; 
+    position: fixed; 
+    bottom:0%;
+    width:100%;
+    //opacity: 1;
+}
+
+#body_container{
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#6a9add+0,b4d0f7+100 */
+height:100vh;
+background: #6a9add; /* Old browsers */
+background: -moz-linear-gradient(-45deg, #6a9add 0%, #b4d0f7 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, #6a9add 0%,#b4d0f7 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, #6a9add 0%,#b4d0f7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6a9add', endColorstr='#b4d0f7',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .nav li{

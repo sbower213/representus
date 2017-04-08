@@ -42,6 +42,10 @@ app.use('/public', express.static('public'));
 var _DATA = dataUtil.loadData().objects;
 
 app.get('/', function(req, res) {
+	res.render('homepage',{});
+})
+
+app.get('/states', function(req, res) {
 	 
 	var states = [];
 	var origStates = dataUtil.states;
