@@ -86,6 +86,8 @@ app.post('/contact', function(req, res) {
 			}
 			console.log('Message %s sent: %s', info.messageId, info.response);
 		});
+		
+		res.render('contactsent', {oc_email: result.oc_email});
 	});
 });
 
