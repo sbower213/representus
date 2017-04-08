@@ -4,6 +4,31 @@ var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var dataUtil = require("./data-util");
 var _ = require('underscore');
+var request = require('request');
+
+var getJsonFromJsonP = function (url, callback) {
+request(url, function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    var jsonpData = body;
+    var json;
+    //if you don't know for sure that you are getting jsonp, then i'd do something like this
+    try
+    {
+       json = JSON.parse(jsonpData);
+    }
+    catch(e)
+    {
+        var startPos = jsonpData.indexOf('({');
+        var endPos = jsonpData.indexOf('})');
+        var jsonString = jsonpData.substring(startPos+1, endPos+1);
+        json = JSON.parse(jsonString);
+    }
+    callback(null, json);
+  } else {
+    callback(error);
+  }
+})
+};
 
 var app = express();
 
@@ -109,6 +134,19 @@ app.get('/rep/:repid', function(req, res) {
 	
 	
     res.render('person', { person:param });
+});
+
+app.get('/zip?=:zipcode', function(req, res) {
+    console.log("Hello");
+    //var results
+    _zipcode = req.params.zipcode;
+    getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/locate?zip="+_zipcode,function(err,data){
+        console.log(data);
+        res.render('zipcode',{
+            reps: data.results
+        });
+    });
+    
 });
 
 app.listen(3000, function() {
