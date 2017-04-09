@@ -18,10 +18,12 @@
         </li>
     {{/each}}
 </ul>
-<a class="twitter-timeline" 
-   href="https://twitter.com/{{person.twitter_id}}"
-   data-tweet-limit="5">
-    Tweets
-</a> 
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8">
-</script>
+{{#if person.twitter_id}}
+    <a class="twitter-timeline" 
+       href="https://twitter.com/{{person.twitter_id}}"
+       data-tweet-limit="5">
+        Tweets
+    </a> 
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8">
+    </script>
+{{/if}}
