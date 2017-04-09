@@ -1,7 +1,13 @@
-<ul>
 {{#each reps}}
-    <img src="/congress_pictures_files/high-res/{{this.govtrack_id}}-200px.jpeg">
-    <li><a href="/rep/{{this.bioguide_id}}">{{this.title}} {{this.first_name}} {{this.last_name}}</a></li>
-	<br><p>{{this.bio}}</p>
+	<div class="representative_div">
+		<div class="rep_img_div">
+			<img class="rep_img" src="/congress_pictures_files/high-res/{{this.govtrack_id}}-200px.jpeg">
+		</div>	
+		<div class="bio_div">
+			<a href="/rep/{{this.bioguide_id}}"><h3>{{this.title}}. {{this.first_name}} {{this.last_name}}</h3></a>
+			<br>
+			<p class="bio">{{this.bio}}</p>
+		</div>
+	</div>
 {{/each}}
-</ul>
+
