@@ -112,11 +112,34 @@ app.post('/contact', function(req, res) {
 				
 app.get('/rep/:repid', function(req, res) {
     var _repid = req.params.repid;
+    
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/?bioguide_id="+_repid,function(err,data){
         //console.log(data)
         person = data.results[0]
-        
-        getJsonFromJsonP("http://www.opensecrets.org/api/?method=candContrib&cid="+person.crp_id+"&apikey=fcfe08573a5871a36bf33d846048cf70&output=json",function(err,data){
+        async.waterfall([
+            function(callback){
+				getJsonFromJsonP("http://www.opensecrets.org/api/?method=candContrib&cid="+person.crp_id+"&apikey=fcfe08573a5871a36bf33d846048cf70&output=json",function(err,data){
+                    var contribs = data.response.contributors.contributor
+                    var contributions = [];
+                    for(i = 0; i < contribs.length; i++) {
+                        contributions.push(contribs[i]['\@attributes'])
+                    }
+					callback(null, contributions);
+				});
+			}
+        ,function(contribs,callback){
+            getJsonFromJsonP("https://www.govtrack.us/api/v2/vote_voter/?person="+person.govtrack_id+"&limit=5&order_by=-created&format=json&fields=vote__id,created,option__value,vote__category,vote__chamber,vote__question,vote__number", function(err,data){
+                votes = data.objects;
+                callback(null,contribs,votes);
+            });
+        }],function(err,contributions, votes){
+            res.render('person',{
+                person:person,
+                contributions: contributions,
+                votes: votes
+            });
+        });
+        /*getJsonFromJsonP(,function(err,data){
             //console.log(data.response.contributors.contributor[0]['\@attributes']);
             var contribs = data.response.contributors.contributor
             var contributions = [];
@@ -132,7 +155,7 @@ app.get('/rep/:repid', function(req, res) {
                     votes: data.objects
                 }) 
             });
-        });
+        });*/
     });
 	
 	/*getJsonFromJsonP("https://api.propublica.org/congress/v1/members/"+_repid+"/votes.json",function(err,data){
