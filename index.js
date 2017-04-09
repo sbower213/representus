@@ -129,19 +129,7 @@ app.post('/search', function(req, res) {
     _zipcode = req.body.zip;
 	
 
-	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
-		var result = data.results[0];
-		//console.log(data);
-		//res.redirect("mailto:"+result.oc_email+"?subject="+subject+"&body="+message);
-		
-		var transporter = nodemailer.createTransport({
-			service: 'gmail',
-			auth: {
-				user: "represent.us.contact@gmail.com",
-				pass: "memes.gov"
-			}
-		});
-    });
+	
 
 	function callback2(err, results){
 		return results;
