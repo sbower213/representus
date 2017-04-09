@@ -6,6 +6,7 @@ var dataUtil = require("./data-util");
 var _ = require('underscore');
 var request = require('request');
 var nodemailer = require('nodemailer');
+var async = require('async');
 
 // JSONP request handler from: http://stackoverflow.com/questions/9060270/node-http-request-for-restful-apis-that-return-jsonp
 var getJsonFromJsonP = function (url, callback) {
@@ -46,81 +47,51 @@ var _DATA = dataUtil.loadData().objects;
 
 app.get('/', function(req, res) {
 	res.render('homepage',{});
-})
-
-app.get('/states', function(req, res) {
-	 
-	var states = [];
-	var origStates = dataUtil.states;
-	
-	for(var state in origStates){
-		var linkName = state.toLowerCase().replace(new RegExp(' ', 'g'), '-');
-		states.push({linkName:linkName, name:state});
-	}
-	
-    res.render('allstates', { states:states });
-})
-
-app.get('/party/:party', function(req, res) {
-	var party = req.params.party;
-	
-	var representatives = _.filter(_DATA, function(obj){
-		return obj.party.toUpperCase() == party.toUpperCase();
-	});
-		
-	party = party + 's';
-	party = party.toUpperCase();
-	
-    res.render('representatives', {
-        party:party,
-		representatives:representatives
-    });
-})
-
-app.get('/state/:name', function(req, res) {
-	 
-	var name = req.params.name;
-	name = name.substring(0,1).toUpperCase() + name.substring(1);
-	while(name.indexOf('-') != -1){
-		var index = name.indexOf('-');
-		name = name.substring(0, index) + ' ' + name.substring(index + 1);
-		name = name.substring(0, index+1) + name.substring(index+1,index+2).toUpperCase() + name.substring(index+2);
-	}
-	
-	var state = dataUtil.states[name];
-	
-	var representatives = _.filter(_DATA, function(obj){
-		return obj.state == state;
-	});
-	
-	var republicans = _.filter(representatives, function(obj){
-		return obj.party == "Republican";
-	});
-	
-	var democrats = _.filter(representatives, function(obj){
-		return obj.party == "Democrat";
-	});
-	
-	var hasRepublicans = republicans.length > 0;
-	var hasDemocrats = democrats.length > 0;
-	
-    res.render('state', {
-        state: name,
-		republicans: republicans,
-		democrats: democrats,
-		hasRepublicans: hasRepublicans,
-		hasDemocrats: hasDemocrats
-    })
-})
-
-app.get('/rep', function(req, res) {
-
-    res.render('representatives', {
-        party:"ALL REPRESENTATIVES",
-		representatives:_DATA
-    });
 });
 
+app.get('/contact/:id', function(req, res) {
+	res.render('contact', {bioguide_id: req.params.id});
+});
+
+app.post('/contact', function(req, res) {
+	var subject = req.body.subject;
+	var message = req.body.message;
+	var repid = req.body.repid;
+	
+	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
+		var result = data.results[0];
+		console.log(data);
+		//res.redirect("mailto:"+result.oc_email+"?subject="+subject+"&body="+message);
+		
+		var transporter = nodemailer.createTransport({
+			service: 'gmail',
+			auth: {
+				user: "represent.us.contact@gmail.com",
+				pass: "memes.gov"
+			}
+		});
+		
+		var mail = {
+			//can replace the name with anything
+			from: '"Represent Us!" <represent.us.contact@gmail.com>',
+			//to: result.oc_email,
+			to: 'represent.us.contact@gmail.com',
+			subject: subject,
+			text: message+'\n\n sent to: '+result.oc_email
+		};
+		
+		transporter.sendMail(mail, (error, info) => {
+			if (error) {
+				return console.log(error);
+			}
+			console.log('Message %s sent: %s', info.messageId, info.response);
+		});
+		
+		res.render('contactsent', {oc_email: result.oc_email});
+	});
+});
+
+				
 app.get('/rep/:repid', function(req, res) {
     var _repid = req.params.repid;
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/?bioguide_id="+_repid,function(err,data){
@@ -151,29 +122,13 @@ app.get('/rep/:repid', function(req, res) {
     });*/
     
 });
-
+				
 app.post('/search', function(req, res) {
     //console.log(req.body.zip);
     //var results
     _zipcode = req.body.zip;
-    getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/locate?zip="+_zipcode,function(err,data){
-        //console.log(data);
-        res.render('zipcode',{
-            reps: data.results
-        });
-    });
-    
-});
-
-app.get('/contact/:id', function(req, res) {
-	res.render('contact', {bioguide_id: req.params.id});
-});
-
-app.post('/contact', function(req, res) {
-	var subject = req.body.subject;
-	var message = req.body.message;
-	var repid = req.body.repid;
 	
+<<<<<<< HEAD
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
 		var result = data.results[0];
 		//console.log(data);
@@ -186,23 +141,58 @@ app.post('/contact', function(req, res) {
 				pass: "memes.gov"
 			}
 		});
+=======
+	function callback2(err, results){
+		return results;
+	}
+	
+    getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/locate?zip="+_zipcode,function(err,data){
+        console.log(data);
+>>>>>>> origin/master
 		
-		var mail = {
-			//can replace the name with anything
-			from: '"Represent Us!" <represent.us.contact@gmail.com>',
-			//to: result.oc_email,
-			to: 'represent.us.contact@gmail.com',
-			subject: subject,
-			text: message+'\n\n sent to: '+result.oc_email
-		};
+		async.waterfall([
 		
-		transporter.sendMail(mail, (error, info) => {
-			if (error) {
-				return console.log(error);
+			function(callback){
+				getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/locate?zip="+_zipcode,function(err,data){
+					callback(null, data);
+				});
+			},
+			function(data, callback){
+				async.map(data.results, function(item, callback2){
+					console.log(item);
+					var curr = item;
+					var name = curr.first_name;
+					name += curr.middle_name != null ? "_"+curr.middle_name : "";
+					name += "_"+curr.last_name;
+					name += curr.name_suffix != null ? "_"+curr.name_suffix : "";
+					
+					getJsonFromJsonP("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&redirects=1&titles="+name,function(err,returned){
+						console.log(name);
+						console.log(returned.query.pages);
+						
+						//hack around b/c wikipedia api
+						var bio_fields = [];
+						for(var p in returned.query.pages){
+							bio_fields.push(returned.query.pages[p]);
+						} 
+						
+						item.bio = bio_fields[0].extract;
+						callback2(null, item);
+					});
+					
+				}, function(err, results){
+					callback(null, results);
+				});
 			}
-			console.log('Message %s sent: %s', info.messageId, info.response);
+			
+		], function(err, result){
+			res.render('zipcode',{
+				reps: result
+			});
 		});
-	});
+        
+    });
+    
 });
 
 app.listen(3000, function() {
