@@ -82,8 +82,8 @@ app.post('/contact', function(req, res) {
 		//res.redirect("mailto:"+result.oc_email+"?subject="+subject+"&body="+message);
 		
 		fs.readFile('email.env', 'utf8', function(err, data) {
-			if (err) consolve.log(err);
-			console.log(data);
+			if (err) console.log(err);
+			
 			var emailpass = data;
 			
 			var transporter = nodemailer.createTransport({
