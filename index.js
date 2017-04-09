@@ -136,7 +136,7 @@ app.get('/rep/:repid', function(req, res) {
             }
             //console.log(contributions)
             getJsonFromJsonP("https://www.govtrack.us/api/v2/vote_voter/?person="+person.govtrack_id+"&limit=5&order_by=-created&format=json&fields=vote__id,created,option__value,vote__category,vote__chamber,vote__question,vote__number",function(err,data){
-                console.log(data.objects);
+                //console.log(data.objects);
                 res.render('person',{
                     person: person,
                     contributions: contributions,
@@ -153,7 +153,7 @@ app.get('/rep/:repid', function(req, res) {
 });
 
 app.post('/search', function(req, res) {
-    console.log(req.body.zip);
+    //console.log(req.body.zip);
     //var results
     _zipcode = req.body.zip;
     getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/locate?zip="+_zipcode,function(err,data){
@@ -176,7 +176,7 @@ app.post('/contact', function(req, res) {
 	
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
 		var result = data.results[0];
-		console.log(data);
+		//console.log(data);
 		//res.redirect("mailto:"+result.oc_email+"?subject="+subject+"&body="+message);
 		
 		var transporter = nodemailer.createTransport({
