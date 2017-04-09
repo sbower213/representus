@@ -8,8 +8,11 @@ Currently, we feel that American citizens don't have easy access to the people w
 ## What it does
 
 Step 1: Search your zip code.
+
 Step 2: Choose a representative or senator.
+
 Step 3: Learn about a person who represents **you!**
+
 Step 4: (optional) Find something you want to talk about with your legislator? Fill out our contact form to send them a note.
 
 Note: With the current setup, it will not _ actually _ send emails to congresspeople.
@@ -42,3 +45,7 @@ Creating a useful tool is easy with dedication, friends, and an eagerness to lea
 ## What's next for represent.us
 
 We're looking into also gathering information of state and local level legislators. Having easier access to all levels of government will further enable constituents to make knowledgeable decisions about the people they elect into power.
+
+## Who made this
+
+represent.us was made during [Bitcamp 2017](https://devpost.com/software/represent-us) by four University of Maryland students: Alex Lees, Kevin Jordan, Sidhanth Tuli, and Steven Bower.
