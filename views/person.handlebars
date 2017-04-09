@@ -1,7 +1,16 @@
 <img src="/congress_pictures_files/high-res/{{person.govtrack_id}}-200px.jpeg">
 {{person.title}} {{person.first_name}} {{person.last_name}}
+{{#if person.district}}
+    Representative for District {{person.district}} of {{person.state_name}}
+{{else}}
+    Senator for {{person.state_name}}
+{{/if}}
+
 <a href="/contact/{{person.bioguide_id}}"><button>Contact Them!</button></a>
 <a href="{{person.website}}">Personal Website</a>
+<h2>Contact Information</h2>
+<p>Phone #: {{person.phone}}</p>
+<p>Email: {{person.oc_email}}</p>
 <h2>Voting History</h2>
 <ul>
     {{#each votes}}
