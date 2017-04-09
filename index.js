@@ -128,7 +128,7 @@ app.post('/search', function(req, res) {
     //var results
     _zipcode = req.body.zip;
 	
-<<<<<<< HEAD
+
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
 		var result = data.results[0];
 		//console.log(data);
@@ -141,14 +141,15 @@ app.post('/search', function(req, res) {
 				pass: "memes.gov"
 			}
 		});
-=======
+    });
+
 	function callback2(err, results){
 		return results;
 	}
 	
     getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/locate?zip="+_zipcode,function(err,data){
         console.log(data);
->>>>>>> origin/master
+
 		
 		async.waterfall([
 		
