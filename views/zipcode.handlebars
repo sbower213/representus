@@ -1,3 +1,19 @@
+
+<div id="navbar">
+	<a href="/">
+		<img id="big_logo" src="/imgs/logo.png">
+	</a>
+	<form name="zipcode_form" method="post" action="/search" onsubmit="return validateForm()">
+		<div class="input-group">
+			<input class="form-control" placeholder="Enter ZIP Code (e.g. 20742)" type="text" name="zip"></input>
+			<span class="input-group-btn">
+				<button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+			</span>
+		</div>
+	</form>
+</div>
+
+
 {{#each reps}}
 	<div class="representative_div">
 		<div class="rep_img_div">

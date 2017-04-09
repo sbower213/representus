@@ -1,17 +1,43 @@
-<img src="/congress_pictures_files/high-res/{{person.govtrack_id}}-200px.jpeg">
-{{person.title}} {{person.first_name}} {{person.last_name}}
-{{#if person.district}}
-    Representative for District {{person.district}} of {{person.state_name}}
-{{else}}
-    Senator for {{person.state_name}}
-{{/if}}
 
-<a href="/contact/{{person.bioguide_id}}"><button>Contact Them!</button></a>
-<a href="{{person.website}}">Personal Website</a>
-<h2>Contact Information</h2>
-<p>Phone #: {{person.phone}}</p>
-<p>Email: {{person.oc_email}}</p>
-<h2>Voting History</h2>
+<div class="container">
+
+<div id="navbar">
+	<a href="/">
+		<img id="big_logo" src="/imgs/logo.png">
+	</a>
+	<form name="zipcode_form" method="post" action="/search" onsubmit="return validateForm()">
+		<div class="input-group">
+			<input class="form-control" placeholder="Enter ZIP Code (e.g. 20742)" type="text" name="zip"></input>
+			<span class="input-group-btn">
+				<button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+			</span>
+		</div>
+	</form>
+</div>
+
+<div id="person_info_div">
+	<div class="rep_img_div">
+		<img class="rep_img" src="/congress_pictures_files/high-res/{{person.govtrack_id}}-200px.jpeg">
+	</div>
+	<div class="bio_div">
+		<h2>{{person.title}}. {{person.first_name}} {{person.last_name}}</h2>
+		<h4>
+		{{#if person.district}}
+			Representative for District {{person.district}} of {{person.state_name}}
+		{{else}}
+			Senator for {{person.state_name}}
+		{{/if}}
+		</h4>
+		<a href="/contact/{{person.bioguide_id}}"><button class="btn btn-danger">Contact Them!</button></a>
+		<a href="{{person.website}}"><button class="btn btn-primary">Personal Website</button></a>
+		<h2>Contact Information</h2>
+		<p>Phone #: {{person.phone}}</p>
+		<p>Email: {{person.oc_email}}</p>
+	</div>
+</div>
+
+<div class="person_more_container">
+<h2>Recent Voting History</h2>
 <ul>
     {{#each votes}}
         <li>
@@ -19,7 +45,10 @@
         </li>
     {{/each}}
 </ul>
-<h2>Contributions (According to OpenSecrets.org)</h2>
+</div>
+
+<div class="person_more_container">
+<h2>Campaign Contributions</h2>
 <ul> 
     {{#each contributions}}
         <li>
@@ -27,6 +56,9 @@
         </li>
     {{/each}}
 </ul>
+</div>
+
+<div class="person_more_container">
 {{#if person.twitter_id}}
     <a class="twitter-timeline" 
        href="https://twitter.com/{{person.twitter_id}}"
@@ -36,3 +68,5 @@
     <script async src="//platform.twitter.com/widgets.js" charset="utf-8">
     </script>
 {{/if}}
+</div>
+</div>

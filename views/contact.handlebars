@@ -1,15 +1,17 @@
-<h3>Send email to {{title}} {{first_name}} {{last_name}}</h3><br>
-<form action="/contact" method="post">
-<input type="hidden" name="repid" value={{bioguide_id}}>
+<div class="container">
+<h3>Send email to {{title}}. {{first_name}} {{last_name}}</h3><br>
+<form id="contact_form" action="/contact" method="post">
+<input required type="hidden" class="form-control" name="repid" value={{bioguide_id}}>
 Your Name: <br>
-<input type="text" name="user_name"><br>
+<input required type="text" class="form-control" name="user_name"><br>
 Your Email: <br>
-<input type="email" name="user_email"><br>
+<input required type="email" class="form-control" name="user_email"><br>
 Your Address: <br>
-<input type="text" name="user_address"><br>
+<input required type="text" class="form-control" name="user_address"><br><br>
 Subject: <br>
-<input type="text" name="subject"><br>
+<input required type="text" class="form-control" name="subject"><br>
 Message: <br>
-<textarea name="message" rows="5" cols="30"> </textarea><br>
-<input type="submit" name="submit">
+<textarea required name="message" rows="5" cols="30" class="form-control" placeholder="Leave your message here..."></textarea><br>
+<button type="submit" name="submit" class="btn btn-danger" id="contact-submit">Submit!</button>
 </form>
+</div>
