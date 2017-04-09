@@ -69,6 +69,9 @@ app.post('/contact', function(req, res) {
 	var subject = req.body.subject;
 	var message = req.body.message;
 	var repid = req.body.repid;
+	var user_name = req.body.user_name;
+	var user_email = req.body.user_email;
+	var user_address = req.body.user_address;
 	
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
 		var result = data.results[0];
@@ -84,12 +87,15 @@ app.post('/contact', function(req, res) {
 		});
 		
 		var mail = {
-			//can replace the name with anything
-			from: '"Represent Us!" <represent.us.contact@gmail.com>',
+			//from: '"Represent Us!" <represent.us.contact@gmail.com>',
+			from: user_name + ' <' + user_email + '>',
 			//to: result.oc_email,
 			to: 'represent.us.contact@gmail.com',
+			replyTo: user_email,
+			cc: user_email,
 			subject: subject,
-			text: message+'\n\n sent to: '+result.oc_email
+			text: message + '\n\n' + user_name + '\n' + user_email + '\n' + user_address + 
+				'\n\n\n --This would be sent to: '+result.oc_email
 		};
 		
 		transporter.sendMail(mail, (error, info) => {
