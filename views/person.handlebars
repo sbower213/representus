@@ -1,5 +1,7 @@
 <img src="/congress_pictures_files/high-res/{{person.govtrack_id}}-200px.jpeg">
 {{person.title}} {{person.first_name}} {{person.last_name}}
+<button><a href="/contact/{{person.bioguide_id}}">Contact Them!</a></button>
+<a href="{{person.website}}">Personal Website</a>
 <h2>Voting History</h2>
 <ul>
     {{#each votes}}
