@@ -166,7 +166,18 @@ app.post('/search', function(req, res) {
 });
 
 app.get('/contact/:id', function(req, res) {
-	res.render('contact', {bioguide_id: req.params.id});
+	var repid = req.params.id;
+	
+	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
+		var result = data.results[0];
+		//console.log(data);
+		
+		res.render('contact', {bioguide_id: req.params.id, 
+			first_name: result.first_name,
+			last_name: result.last_name,
+			title: result.title
+		});
+	});
 });
 
 app.post('/contact', function(req, res) {
@@ -176,7 +187,7 @@ app.post('/contact', function(req, res) {
 	
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
 		var result = data.results[0];
-		console.log(data);
+		//console.log(data);
 		//res.redirect("mailto:"+result.oc_email+"?subject="+subject+"&body="+message);
 		
 		var transporter = nodemailer.createTransport({
@@ -193,7 +204,7 @@ app.post('/contact', function(req, res) {
 			//to: result.oc_email,
 			to: 'represent.us.contact@gmail.com',
 			subject: subject,
-			text: message+'\n\n sent to: '+result.oc_email
+			text: message+'\n\n would be sent to: '+result.oc_email
 		};
 		
 		transporter.sendMail(mail, (error, info) => {
