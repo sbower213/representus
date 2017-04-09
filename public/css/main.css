@@ -13,10 +13,14 @@
 }
 
 .blurb {
+	background-color:rgba(0, 0, 0, 0.25);
+	margin: 10px 10px 30px 40px;
+	padding: 5px;
+	border-radius: 7px;
 	display: inline-block;
 	width: 33%;
 	margin: 5px auto;
-	padding: 0 20px 0 20px;
+	padding: 5px 20px 0 20px;
 	vertical-align:top;
 	text-align: justify;
 }
@@ -29,8 +33,10 @@
 
 #blurb_container{
     position: fixed; 
+	display: flex;
     bottom:0%;
     width:100%;
+	margin-bottom: 5px;
 }
 
 html{
