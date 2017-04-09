@@ -8,6 +8,7 @@
 #main_logo_div{
   width: 50%;
   margin: 0 auto;
+  text-align:center
 }
 
 .blurb {
@@ -114,4 +115,8 @@ background-attachment:fixed;
 
 .bio_div{
 	margin-left: 210px;
+}
+
+#big_logo{
+    height: 100px;
 }
