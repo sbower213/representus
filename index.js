@@ -50,7 +50,18 @@ app.get('/', function(req, res) {
 });
 
 app.get('/contact/:id', function(req, res) {
-	res.render('contact', {bioguide_id: req.params.id});
+	var repid = req.params.id;
+	
+	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
+		var result = data.results[0];
+		//console.log(data);
+		
+		res.render('contact', {bioguide_id: req.params.id, 
+			first_name: result.first_name,
+			last_name: result.last_name,
+			title: result.title
+		});
+	});
 });
 
 app.post('/contact', function(req, res) {
@@ -107,7 +118,7 @@ app.get('/rep/:repid', function(req, res) {
             }
             //console.log(contributions)
             getJsonFromJsonP("https://www.govtrack.us/api/v2/vote_voter/?person="+person.govtrack_id+"&limit=5&order_by=-created&format=json&fields=vote__id,created,option__value,vote__category,vote__chamber,vote__question,vote__number",function(err,data){
-                console.log(data.objects);
+                //console.log(data.objects);
                 res.render('person',{
                     person: person,
                     contributions: contributions,
@@ -124,16 +135,20 @@ app.get('/rep/:repid', function(req, res) {
 });
 				
 app.post('/search', function(req, res) {
-    console.log(req.body.zip);
+    //console.log(req.body.zip);
     //var results
     _zipcode = req.body.zip;
 	
+
+	
+
 	function callback2(err, results){
 		return results;
 	}
 	
     getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators/locate?zip="+_zipcode,function(err,data){
         console.log(data);
+
 		
 		async.waterfall([
 		
@@ -179,6 +194,7 @@ app.post('/search', function(req, res) {
     });
     
 });
+
 
 app.listen(3000, function() {
     console.log('House of Representatives listening on port 3000!');

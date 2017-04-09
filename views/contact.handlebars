@@ -1,7 +1,9 @@
+<h3>Send email to {{title}} {{first_name}} {{last_name}}</h3><br>
 <form action="/contact" method="post">
 <input type="hidden" name="repid" value={{bioguide_id}}>
-Subject: <input type="text" name="subject"><br>
-Topic: <br>
-Message: <textarea name="message" rows="5" cols="30"> </textarea>
+Subject: <br>
+<input type="text" name="subject"><br>
+Message: <br>
+<textarea name="message" rows="5" cols="30"> </textarea><br>
 <input type="submit" name="submit">
 </form>

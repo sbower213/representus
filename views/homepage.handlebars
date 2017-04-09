@@ -1,7 +1,7 @@
 <div id="main_logo_div">
-	<img id="big_logo" src="whatever_file_path"></img>
+	<img id="big_logo" src="whatever_file_path">
 	<h3>hi! we're here to help you.</h3>
-	<form id="zip_form" method="post" action="/search">
+	<form name="zipcode_form" id="zip_form" method="post" action="/search" onsubmit="return validateForm()">
 		<div class="input-group">
 			<input class="form-control" placeholder="Enter ZIP Code (e.g. 20742)" type="text" name="zip"></input>
 			<span class="input-group-btn">

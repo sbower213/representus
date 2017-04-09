@@ -1,5 +1,7 @@
 <img src="/congress_pictures_files/high-res/{{person.govtrack_id}}-200px.jpeg">
 {{person.title}} {{person.first_name}} {{person.last_name}}
+<a href="/contact/{{person.bioguide_id}}"><button>Contact Them!</button></a>
+<a href="{{person.website}}">Personal Website</a>
 <h2>Voting History</h2>
 <ul>
     {{#each votes}}
@@ -16,3 +18,12 @@
         </li>
     {{/each}}
 </ul>
+{{#if person.twitter_id}}
+    <a class="twitter-timeline" 
+       href="https://twitter.com/{{person.twitter_id}}"
+       data-tweet-limit="5">
+        Tweets
+    </a> 
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8">
+    </script>
+{{/if}}
