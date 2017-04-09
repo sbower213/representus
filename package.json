@@ -11,8 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.1",
+    "bufferedreader": "^1.0.4",
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
+    "fs": "0.0.1-security",
     "http": "0.0.0",
     "morgan": "^1.8.1",
     "nodemailer": "^4.0.0",

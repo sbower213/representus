@@ -7,6 +7,7 @@ var _ = require('underscore');
 var request = require('request');
 var nodemailer = require('nodemailer');
 var async = require('async');
+var fs = require('fs');
 
 // JSONP request handler from: http://stackoverflow.com/questions/9060270/node-http-request-for-restful-apis-that-return-jsonp
 var getJsonFromJsonP = function (url, callback) {
@@ -73,39 +74,47 @@ app.post('/contact', function(req, res) {
 	var user_email = req.body.user_email;
 	var user_address = req.body.user_address;
 	
+	
+	
 	getJsonFromJsonP("https://congress.api.sunlightfoundation.com/legislators?bioguide_id="+repid,function(err,data){
 		var result = data.results[0];
-		console.log(data);
+		//console.log(data);
 		//res.redirect("mailto:"+result.oc_email+"?subject="+subject+"&body="+message);
 		
-		var transporter = nodemailer.createTransport({
-			service: 'gmail',
-			auth: {
-				user: "represent.us.contact@gmail.com",
-				pass: "memes.gov"
-			}
+		fs.readFile('email.env', 'utf8', function(err, data) {
+			if (err) consolve.log(err);
+			console.log(data);
+			var emailpass = data;
+			
+			var transporter = nodemailer.createTransport({
+				service: 'gmail',
+				auth: {
+					user: 'represent.us.contact@gmail.com',
+					pass: emailpass
+				}
+			});
+			
+			var mail = {
+				//from: '"Represent Us!" <represent.us.contact@gmail.com>',
+				from: user_name + ' <' + user_email + '>',
+				//to: result.oc_email,
+				to: 'represent.us.contact@gmail.com',
+				replyTo: user_email,
+				cc: user_email,
+				subject: subject,
+				text: message + '\n\n' + user_name + '\n' + user_email + '\n' + user_address + 
+					'\n\n\n --This would be sent to: '+result.oc_email
+			};
+			
+			transporter.sendMail(mail, (error, info) => {
+				if (error) {
+					return console.log(error);
+				}
+				console.log('Message %s sent: %s', info.messageId, info.response);
+			});
+			
+			res.render('contactsent', {oc_email: result.oc_email});
 		});
-		
-		var mail = {
-			//from: '"Represent Us!" <represent.us.contact@gmail.com>',
-			from: user_name + ' <' + user_email + '>',
-			//to: result.oc_email,
-			to: 'represent.us.contact@gmail.com',
-			replyTo: user_email,
-			cc: user_email,
-			subject: subject,
-			text: message + '\n\n' + user_name + '\n' + user_email + '\n' + user_address + 
-				'\n\n\n --This would be sent to: '+result.oc_email
-		};
-		
-		transporter.sendMail(mail, (error, info) => {
-			if (error) {
-				return console.log(error);
-			}
-			console.log('Message %s sent: %s', info.messageId, info.response);
-		});
-		
-		res.render('contactsent', {oc_email: result.oc_email});
 	});
 });
 
